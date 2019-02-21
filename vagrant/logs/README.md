@@ -47,13 +47,10 @@ The questions that this python script answers are the following ones:
 - [Vagrant](https://www.vagrantup.com/)
 - [VirtualBox](https://www.virtualbox.org/)
 - [Python 3](https://www.python.org/downloads/)
+- [VM provided by the instructors](https://s3.amazonaws.com/video.udacity-data.com/topher/2018/April/5acfbfa3_fsnd-virtual-machine/fsnd-virtual-machine.zip)
 - [The database provided by the instructors](https://d17h27t6h515a5.cloudfront.net/topher/2016/August/57b5f748_newsdata/newsdata.zip)
 
 ## How to run it
-
-It requires Python and the VM with the postgresql database provided by the instructors.
-
-Place the 'logs' folder inside the vagrant directory.
 
 ```sh
 $ cd vagrant
