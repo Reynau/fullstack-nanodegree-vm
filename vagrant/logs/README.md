@@ -42,6 +42,12 @@ The questions that this python script answers are the following ones:
 2. Who are the most popular article authors of all time?
 3. On which days did more than 1% of requests lead to errors?
 
+## Design
+
+The script has been designed to be simple and easy to understand. Each question is answered in a continuous block of code, identified by a comment, without being merged with other questions code, improving readability.  
+
+A function named `printExerciceOutput` has been defined to facilitate the queries outputting and to remove code duplication.
+
 ## Requirements
 
 - [Vagrant](https://www.vagrantup.com/)
@@ -52,10 +58,12 @@ The questions that this python script answers are the following ones:
 
 ## How to run it
 
+Extract your `newsdata.zip` file on your vagrant/logs directory and then run the following shell commands:
 ```sh
 $ cd vagrant
 $ vagrant up
 $ vagrant ssh
 vagrant@vagrant$ cd /vagrant/logs
+vagrant@vagrant$ psql -d news -f newsdata.sql
 vagrant@vagrant$ python logs.py
 ```

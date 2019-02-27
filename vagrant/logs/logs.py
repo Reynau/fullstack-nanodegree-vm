@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-"""Solves exercices of Logs deriverable for Full-Stack Web Developer Nanodegree."""
+"""Solve Log project for Full-Stack WebDeveloper Nanodegree."""
 
 
 import psycopg2
@@ -25,9 +25,9 @@ c.execute("""
         SELECT path, count(*) AS views
         FROM log
         GROUP BY path
-    ) AS log 
+    ) AS log
     ON log.path = '/article/' || articles.slug
-    ORDER BY views DESC 
+    ORDER BY views DESC
     LIMIT 3;
 """)
 q1 = c.fetchall()
@@ -44,7 +44,7 @@ c.execute("""
         SELECT path, count(*) AS views
         FROM log
         GROUP BY path
-    ) AS log 
+    ) AS log
     ON log.path = '/article/' || articles.slug
     GROUP BY name
     ORDER BY total DESC;
