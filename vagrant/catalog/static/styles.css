@@ -1,0 +1,75 @@
+@import url("https://fonts.googleapis.com/css?family=Montserrat");
+@import url("https://fonts.googleapis.com/css?family=Noto+Serif+SC");
+html, body {
+  margin: 0;
+  font-family: 'Montserrat', sans-serif;
+  color: #353535;
+}
+
+button {
+  font-family: 'Montserrat', sans-serif;
+}
+
+a {
+  text-decoration: none;
+}
+
+.main-menu {
+  width: 100%;
+  background-color: white;
+  border-bottom: 2px solid #353535;
+  display: -ms-grid;
+  display: grid;
+      grid-template-areas: "title button";
+  -ms-grid-rows: 60px auto;
+      grid-template-rows: 60px auto;
+  color: #353535;
+}
+
+.main-menu #title {
+  font-size: 2em;
+  color: #353535;
+  font-weight: bold;
+  -ms-grid-row: 1;
+  -ms-grid-column: 1;
+  grid-area: title;
+  -ms-flex-item-align: center;
+      -ms-grid-row-align: center;
+      align-self: center;
+  margin-left: 200px;
+}
+
+.main-menu #login {
+  -ms-grid-row: 1;
+  -ms-grid-column: 2;
+  grid-area: button;
+  -ms-flex-item-align: center;
+      -ms-grid-row-align: center;
+      align-self: center;
+  -ms-grid-column-align: right;
+      justify-self: right;
+  margin-right: 200px;
+  background-color: #2E467C;
+  color: white;
+  border: 0;
+  padding: 15px;
+  border-radius: 4px;
+}
+
+.container {
+  margin: 50px 200px 0 200px;
+}
+
+.items {
+  grid-area: items;
+}
+
+.items a {
+  background-color: #3EC142;
+  color: white;
+  border: 0;
+  padding: 15px;
+  border-radius: 4px;
+  margin: 10px 5px 10px 5px;
+}
+/*# sourceMappingURL=styles.css.map */

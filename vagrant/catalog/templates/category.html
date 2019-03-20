@@ -5,21 +5,33 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>{{ category.name }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <h1>{{ category.name }}</h1>
-    <ul>
-        {% for i in items %}
+    <nav class="main-menu">
+        <a id="title" href = "{{ url_for('categories') }}">Catalog</a>
+        <a id="login" href="#">LOGIN</a>
+    </nav>
+    <!--
+    <nav class="admin-nav">
+        <ul>
+            <li><a href="{{ url_for('editCategory', category_id = category.id) }}">Edit</a></li>
+            <li><a href="{{ url_for('deleteCategory', category_id = category.id) }}">Delete</a></li>
+        </ul>
+    </nav>
+    -->
+    <div class="container">
+        <h1>{{ category.name }}</h1>
+        <div class="items">
+            <h2>Items</h2>
+            {% for i in items %}
 
-        <li>
             <a href="{{ url_for('item', item_id=i.id) }}">{{ i.name }}</a>
-            <a href="{{ url_for('editItem', item_id=i.id) }}">Edit</a>
-            <a href="{{ url_for('deleteItem', item_id=i.id) }}">Delete</a>
-        </li>
 
-        {% endfor %}
-    </ul>
-    
-    <a href = "{{ url_for('categories') }}">Home</a>
+            {% endfor %}
+        </div>
+
+        
+    </div>
 </body>
 </html>

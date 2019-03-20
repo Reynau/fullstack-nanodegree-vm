@@ -15,7 +15,8 @@ DBSession = sessionmaker(bind=engine)
 def categories():
     session = DBSession()
     categories = session.query(Category).all()
-    return render_template('index.html', categories=categories)
+    items = session.query(Item).all()
+    return render_template('index.html', categories=categories, items=items)
 
 @app.route('/categories/<int:category_id>/')
 def category(category_id):

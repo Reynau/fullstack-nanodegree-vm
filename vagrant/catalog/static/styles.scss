@@ -1,0 +1,73 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat');
+@import url('https://fonts.googleapis.com/css?family=Noto+Serif+SC');
+
+$margin: 200px;
+$black: #353535;
+$blue: #2E467C;
+$green: #3EC142;
+
+html, body {
+    margin: 0;
+    font-family: 'Montserrat', sans-serif;
+    color: $black;
+}
+button {
+    font-family: 'Montserrat', sans-serif;
+}
+
+a {
+    text-decoration: none;
+}
+
+.main-menu {
+    width: 100%;
+
+    background-color: white;
+    border-bottom: 2px solid $black;
+
+    display: grid;
+    grid-template-areas: 
+        "title button";
+    grid-template-rows: 60px auto;
+
+    color: $black;
+
+    #title {
+        font-size: 2em;
+        color: $black;
+        font-weight: bold;
+        grid-area: title;
+        align-self: center;
+        margin-left: $margin;
+    }
+
+    #login {
+        grid-area: button;
+        align-self: center;
+        justify-self: right;
+        margin-right: $margin;
+
+        background-color: $blue;
+        color: white;
+        border: 0;
+        padding: 15px;
+        border-radius: 4px;
+    }
+}
+
+.container {
+    margin: $margin/4 $margin 0 $margin;
+}
+
+.items {
+    grid-area: items;
+
+    a {
+        background-color: $green;
+        color: white;
+        border: 0;
+        padding: 15px;
+        border-radius: 4px;
+        margin: 10px 5px 10px 5px;
+    }
+}

@@ -1,0 +1,27 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat');
+@import url('https://fonts.googleapis.com/css?family=Noto+Serif+SC');
+
+$margin: 200px;
+$black: #353535;
+$blue: #2E467C;
+$green: #3EC142;
+
+.container {
+    display: grid;
+    grid-template-areas: 
+        "message message"
+        "categories items";
+}
+
+.categories {
+    grid-area: categories;
+
+    a {
+        background-color: $blue;
+        color: white;
+        border: 0;
+        padding: 15px;
+        border-radius: 4px;
+        margin: 10px 5px 10px 5px;
+    }
+}

@@ -5,30 +5,53 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Catalog Project</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='index.css') }}">
 </head>
 <body>
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-    <ul>
-        {% for message in messages %}
-        <li><strong>{{ message }}</strong></li>
-        {% endfor %}
-    </ul>
-    {% endif %}
-    {% endwith %}
-    <a href = "{{ url_for('newCategory') }}">Create New Category</a>
-    <br>
-    <a href = "{{ url_for('newItem') }}">Create New Item</a>
-    <ul>
-        {% for c in categories %}
+    <nav class="main-menu">
+        <a id="title" href = "{{ url_for('categories') }}">Catalog</a>
+        <a id="login" href="#">LOGIN</a>
+    </nav>
+    <!--
+    <nav class="admin-nav">
+        <ul>
+            <li><a href = "{{ url_for('newCategory') }}">Create New Category</a></li>
+            <li><a href = "{{ url_for('newItem') }}">Create New Item</a></li>
+        </ul>
+    </nav>
+    -->
 
-        <li>
+    <div class="container">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <div class="messages">
+            <ul>
+                {% for message in messages %}
+                <li><strong>{{ message }}</strong></li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+        {% endwith %}
+
+        <div class="categories">
+            <h2>Categories</h2>
+            {% for c in categories %}
+
             <a href="{{ url_for('category', category_id = c.id) }}">{{ c.name }}</a>
-            <a href="{{ url_for('editCategory', category_id = c.id) }}">Edit</a>
-            <a href="{{ url_for('deleteCategory', category_id = c.id) }}">Delete</a>
-        </li>
+    
+            {% endfor %}
+        </div>
 
-        {% endfor %}
-    </ul>
+        <div class="items">
+            <h2>Newest items</h2>
+            {% for i in items %}
+
+            <a href="{{ url_for('item', item_id = i.id) }}">{{ i.name }}</a>
+    
+            {% endfor %}
+        </div>
+    </div>
 </body>
 </html>
