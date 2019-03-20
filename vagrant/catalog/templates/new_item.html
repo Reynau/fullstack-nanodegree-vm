@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>New Item</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+    <form action="{{ url_for('newItem') }}" method = 'post'>
+        <input type='text' size='30' name='name' required>
+        <textarea rows='4' name='description' required></textarea>
+        <input type='text' size='30' name='price' required>
+        <select name='category' required>
+            {% for c in categories %}
+            <option value="{{ c.id }}">{{ c.name }}</option>
+            {% endfor %}
+        </select>
+        <input type='submit' value='Create'>
+    </form>
+    <a href = "{{ url_for('home') }}">Home</a>
+</body>
+</html>

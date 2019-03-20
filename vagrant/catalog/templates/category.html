@@ -11,7 +11,11 @@
     <ul>
         {% for i in items %}
 
-        <li>{{ i.name }}</li>
+        <li>
+            <a href="{{ url_for('item', item_id=i.id) }}">{{ i.name }}</a>
+            <a href="{{ url_for('editItem', item_id=i.id) }}">Edit</a>
+            <a href="{{ url_for('deleteItem', item_id=i.id) }}">Delete</a>
+        </li>
 
         {% endfor %}
     </ul>
