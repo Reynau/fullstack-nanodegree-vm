@@ -9,23 +9,24 @@ engine = create_engine('sqlite:///catalog.db')
 Base.metadata.bind = engine
 
 DBSession = sessionmaker(bind=engine)
-session = DBSession()
-
 
 @app.route('/')
 @app.route('/categories')
 def categories():
+    session = DBSession()
     categories = session.query(Category).all()
     return render_template('index.html', categories=categories)
 
 @app.route('/categories/<int:category_id>/')
 def category(category_id):
+    session = DBSession()
     category = session.query(Category).get(category_id)
     items = session.query(Item).filter_by(category_id=category.id).all()
     return render_template('category.html', category=category, items=items)
 
 @app.route('/categories/new/', methods=['GET', 'POST'])
 def newCategory():
+    session = DBSession()
     if request.method == 'GET':
         return render_template('new_category.html')
     else:
@@ -37,6 +38,7 @@ def newCategory():
 
 @app.route('/categories/<int:category_id>/edit/', methods=['GET', 'POST'])
 def editCategory(category_id):
+    session = DBSession()
     category = session.query(Category).get(category_id)
     if request.method == 'GET':
         return render_template('edit_category.html', category=category)
@@ -49,6 +51,7 @@ def editCategory(category_id):
 
 @app.route('/categories/<int:category_id>/delete/', methods=['GET', 'POST'])
 def deleteCategory(category_id):
+    session = DBSession()
     category = session.query(Category).get(category_id)
     if request.method == 'GET':
         return render_template('delete_category.html', category=category)
@@ -63,11 +66,13 @@ def deleteCategory(category_id):
 
 @app.route('/items/<int:item_id>/')
 def item(item_id):
+    session = DBSession()
     item = session.query(Item).get(item_id)
     return render_template('item.html', item=item)
 
 @app.route('/items/new/', methods=['GET', 'POST'])
 def newItem():
+    session = DBSession()
     categories = session.query(Category).all()
     if request.method == 'GET':
         return render_template('new_item.html', categories=categories)
@@ -85,6 +90,7 @@ def newItem():
 
 @app.route('/items/<int:item_id>/edit/', methods=['GET', 'POST'])
 def editItem(item_id):
+    session = DBSession()
     categories = session.query(Category).all()
     item = session.query(Item).get(item_id)
     if request.method == 'GET':
@@ -104,6 +110,7 @@ def editItem(item_id):
 
 @app.route('/items/<int:item_id>/delete/', methods=['GET', 'POST'])
 def deleteItem(item_id):
+    session = DBSession()
     item = session.query(Item).get(item_id)
     category = session.query(Category).get(item.category_id)
     if request.method == 'GET':
@@ -119,12 +126,14 @@ def deleteItem(item_id):
 
 @app.route('/api/categories/')
 def categoriesJSON():
+    session = DBSession()
     categories = session.query(Category).all()
     return jsonify(Categories=[c.serialize for c in categories])
 
 
 @app.route('/api/items/')
 def itemsJSON():
+    session = DBSession()
     items = session.query(Item).all()
     return jsonify(Items=[i.serialize for i in items])
 
