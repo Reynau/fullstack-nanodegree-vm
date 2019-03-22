@@ -5,6 +5,7 @@ $margin: 200px;
 $black: #353535;
 $blue: #2E467C;
 $green: #3EC142;
+$red: #E0353B;
 
 html, body {
     margin: 0;
@@ -33,6 +34,7 @@ a {
     color: $black;
 
     #title {
+        display: inline-block;
         font-size: 2em;
         color: $black;
         font-weight: bold;
@@ -41,17 +43,62 @@ a {
         margin-left: $margin;
     }
 
-    #login {
+    .user {
+        display: inline-block;
         grid-area: button;
         align-self: center;
         justify-self: right;
         margin-right: $margin;
+    }
 
+    #login {
         background-color: $blue;
         color: white;
         border: 0;
         padding: 15px;
         border-radius: 4px;
+    }
+
+    #logout {
+        color: $black;
+        text-decoration: underline;
+        font-size: 85%;
+    }
+}
+
+.admin-nav {
+    width: 100%;
+    background-color: $black;
+    padding: 0 $margin 0 $margin;
+    border-bottom: 2px solid $black;
+
+    a {
+        display: inline-block;
+        background-color: white;
+        color: $black;
+        border: 0;
+        padding: 5px 15px;
+        border-radius: 4px;
+        margin: 10px 5px;
+    }
+}
+
+.messages{
+    background-color: rgba($red, 0.1);
+    padding: 0 $margin;
+    text-align: center;
+
+    ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    li {
+        display: inline-block;
+        color: $red;
+        padding: 5px 5px;
+        width: 100%;
     }
 }
 
@@ -68,6 +115,6 @@ a {
         border: 0;
         padding: 15px;
         border-radius: 4px;
-        margin: 10px 5px 10px 5px;
+        margin: 10px 5px;
     }
 }

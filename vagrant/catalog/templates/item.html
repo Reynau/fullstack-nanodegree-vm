@@ -1,31 +1,21 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>{{ item.name }}</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='styles.css') }}">
-</head>
-<body>
-    <nav class="main-menu">
-        <a id="title" href = "{{ url_for('categories') }}">Catalog</a>
-        <a id="login" href="#">LOGIN</a>
-    </nav>
-    <!--
+{% extends "layout.html" %}
+
+{% block title %}
+    {{ item.name }}
+{% endblock %}
+
+{% block admin_navbar %}
+    {% if item.sub == session['sub'] %}
     <nav class="admin-nav">
-        <ul>
-            <li><a href="{{ url_for('editItem', item_id=item.id) }}">Edit</a></li>
-            <li><a href="{{ url_for('deleteItem', item_id=item.id) }}">Delete</a></li>
-        </ul>
+        <a href="{{ url_for('editItem', item_id=item.id) }}">Edit</a>
+        <a class="delete" href="{{ url_for('deleteItem', item_id=item.id) }}">Delete</a>
     </nav>
-    -->
-    <div class="container">
-        <h1>{{ item.name }}</h1>
-        <p>{{ item.description }}</p>
-        <p>{{ item.price }}</p>
-        <p>{{ item.category.name }}</p>
-    </div>
-    
-</body>
-</html>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    <h1>{{ item.name }}</h1>
+    <p>{{ item.description }}</p>
+    <p>{{ item.price }}</p>
+    <p>{{ item.category.name }}</p>
+{% endblock %}

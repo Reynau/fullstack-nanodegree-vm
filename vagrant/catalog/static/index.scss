@@ -11,17 +11,27 @@ $green: #3EC142;
     grid-template-areas: 
         "message message"
         "categories items";
+
+    grid-template-columns: max-content auto;
 }
 
 .categories {
     grid-area: categories;
+    margin-right: $margin/2;
+
+    ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
 
     a {
-        background-color: $blue;
-        color: white;
-        border: 0;
-        padding: 15px;
-        border-radius: 4px;
-        margin: 10px 5px 10px 5px;
+        display: inline-block;
+        color: $black;
+        padding: 5px 5px;
+        width: 100%;
+    }
+    a:hover {
+        background-color: rgba($black, 0.1)
     }
 }

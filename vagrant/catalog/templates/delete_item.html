@@ -1,15 +1,17 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Delete {{ item.name }}</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-</head>
-<body>
-    <form action="{{ url_for('deleteItem', item_id=item.id ) }}" method = 'post'>
-        <input type='submit' value='Delete {{ item.name }}'>
-    </form>
-    <a href = "{{ url_for('categories') }}">Home</a>
-</body>
-</html>
+{% extends "layout.html" %}
+
+{% block title %}
+    New item
+{% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='form.css') }}">
+{% endblock %}
+
+{% block content %}
+<form action="{{ url_for('deleteItem', item_id=item.id ) }}" method = 'post'>
+    <input type='submit' value='Delete item {{ item.name }}'>
+    <a href="{{ url_for('item', item_id=item.id) }}">Cancel</a>
+</form>
+{% endblock %}

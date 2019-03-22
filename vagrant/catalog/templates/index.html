@@ -1,57 +1,40 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Catalog Project</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='styles.css') }}">
+{% extends "layout.html" %}
+
+{% block title %}
+    Categories
+{% endblock %}
+
+{% block head %}
+    {{ super() }}
     <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='index.css') }}">
-</head>
-<body>
-    <nav class="main-menu">
-        <a id="title" href = "{{ url_for('categories') }}">Catalog</a>
-        <a id="login" href="#">LOGIN</a>
-    </nav>
-    <!--
+{% endblock %}
+
+{% block admin_navbar %}
+    {% if session['sub'] %}
     <nav class="admin-nav">
-        <ul>
-            <li><a href = "{{ url_for('newCategory') }}">Create New Category</a></li>
-            <li><a href = "{{ url_for('newItem') }}">Create New Item</a></li>
-        </ul>
+        <!--<a href = "{{ url_for('newCategory') }}">Create New Category</a>-->
+        <a href = "{{ url_for('newItem') }}">Create New Item</a>
     </nav>
-    -->
+    {% endif %}
+    
+{% endblock %}
 
-    <div class="container">
-        {% with messages = get_flashed_messages() %}
-        {% if messages %}
-        <div class="messages">
-            <ul>
-                {% for message in messages %}
-                <li><strong>{{ message }}</strong></li>
-                {% endfor %}
-            </ul>
-        </div>
-        {% endif %}
-        {% endwith %}
-
-        <div class="categories">
-            <h2>Categories</h2>
+{% block content %}
+    <div class="categories">
+        <h2>Categories</h2>
+        <ul>
             {% for c in categories %}
-
-            <a href="{{ url_for('category', category_id = c.id) }}">{{ c.name }}</a>
-    
+            <li><a href="{{ url_for('category', category_id = c.id) }}">{{ c.name }}</a></li>
             {% endfor %}
-        </div>
-
-        <div class="items">
-            <h2>Newest items</h2>
-            {% for i in items %}
-
-            <a href="{{ url_for('item', item_id = i.id) }}">{{ i.name }}</a>
-    
-            {% endfor %}
-        </div>
+        </ul>
     </div>
-</body>
-</html>
+
+    <div class="items">
+        <h2>Newest items</h2>
+        {% for i in items %}
+
+        <a href="{{ url_for('item', item_id = i.id) }}">{{ i.name }}</a>
+
+        {% endfor %}
+    </div>
+{% endblock %}

@@ -18,8 +18,6 @@ DBSession = sessionmaker(bind=engine)
 # session.rollback()
 session = DBSession()
 
-
-
 #Menu for UrbanBurger
 category = Category(name = "Soccer")
 session.add(category)
@@ -33,14 +31,6 @@ category3 = Category(name = "Baseball")
 session.add(category3)
 session.commit()
 
-item = Item(name = "Veggie Burger", description = "Juicy grilled veggie patty with tomato mayo and lettuce", price = "$7.50", category = category)
-session.add(item)
-session.commit()
-
-item = Item(name = "Veggie Burger 2", description = "Juicy grilled veggie patty with tomato mayo and lettuce", price = "$7.50", category = category)
-session.add(item)
-session.commit()
-
-item = Item(name = "Veggie Burger 3", description = "Juicy grilled veggie patty with tomato mayo and lettuce", price = "$7.50", category = category)
+item = Item(name = "Veggie Burger", description = "Juicy grilled veggie patty with tomato mayo and lettuce", sub = "1", price = "$7.50", category = category)
 session.add(item)
 session.commit()

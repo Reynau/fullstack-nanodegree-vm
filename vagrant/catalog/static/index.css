@@ -4,20 +4,32 @@
   display: -ms-grid;
   display: grid;
       grid-template-areas: "message message" "categories items";
+  -ms-grid-columns: max-content auto;
+      grid-template-columns: -webkit-max-content auto;
+      grid-template-columns: max-content auto;
 }
 
 .categories {
   -ms-grid-row: 2;
   -ms-grid-column: 1;
   grid-area: categories;
+  margin-right: 100px;
+}
+
+.categories ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
 .categories a {
-  background-color: #2E467C;
-  color: white;
-  border: 0;
-  padding: 15px;
-  border-radius: 4px;
-  margin: 10px 5px 10px 5px;
+  display: inline-block;
+  color: #353535;
+  padding: 5px 5px;
+  width: 100%;
+}
+
+.categories a:hover {
+  background-color: rgba(53, 53, 53, 0.1);
 }
 /*# sourceMappingURL=index.css.map */

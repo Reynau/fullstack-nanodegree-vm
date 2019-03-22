@@ -27,6 +27,7 @@ a {
 }
 
 .main-menu #title {
+  display: inline-block;
   font-size: 2em;
   color: #353535;
   font-weight: bold;
@@ -39,7 +40,8 @@ a {
   margin-left: 200px;
 }
 
-.main-menu #login {
+.main-menu .user {
+  display: inline-block;
   -ms-grid-row: 1;
   -ms-grid-column: 2;
   grid-area: button;
@@ -49,11 +51,56 @@ a {
   -ms-grid-column-align: right;
       justify-self: right;
   margin-right: 200px;
+}
+
+.main-menu #login {
   background-color: #2E467C;
   color: white;
   border: 0;
   padding: 15px;
   border-radius: 4px;
+}
+
+.main-menu #logout {
+  color: #353535;
+  text-decoration: underline;
+  font-size: 85%;
+}
+
+.admin-nav {
+  width: 100%;
+  background-color: #353535;
+  padding: 0 200px 0 200px;
+  border-bottom: 2px solid #353535;
+}
+
+.admin-nav a {
+  display: inline-block;
+  background-color: white;
+  color: #353535;
+  border: 0;
+  padding: 5px 15px;
+  border-radius: 4px;
+  margin: 10px 5px;
+}
+
+.messages {
+  background-color: rgba(224, 53, 59, 0.1);
+  padding: 0 200px;
+  text-align: center;
+}
+
+.messages ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.messages li {
+  display: inline-block;
+  color: #E0353B;
+  padding: 5px 5px;
+  width: 100%;
 }
 
 .container {
@@ -70,6 +117,6 @@ a {
   border: 0;
   padding: 15px;
   border-radius: 4px;
-  margin: 10px 5px 10px 5px;
+  margin: 10px 5px;
 }
 /*# sourceMappingURL=styles.css.map */

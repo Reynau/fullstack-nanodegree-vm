@@ -1,0 +1,41 @@
+@import url("https://fonts.googleapis.com/css?family=Montserrat");
+@import url("https://fonts.googleapis.com/css?family=Noto+Serif+SC");
+form {
+  margin: 0 auto;
+  width: 60%;
+}
+
+form label {
+  display: block;
+}
+
+form input, form select, form textarea {
+  font-family: 'Montserrat', sans-serif;
+  color: #353535;
+  font-size: 16px;
+  width: 100%;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  padding: 15px 5px;
+  margin: 10px 0;
+  border: 1px solid rgba(53, 53, 53, 0.5);
+}
+
+form input {
+  cursor: pointer;
+}
+
+form a {
+  display: inline-block;
+  text-align: center;
+  color: #353535;
+  background-color: buttonface;
+  font-family: 'Montserrat', sans-serif;
+  width: 100%;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  padding: 15px 5px;
+  margin: 10px 0;
+  border: 1px solid rgba(53, 53, 53, 0.5);
+}
+/*# sourceMappingURL=form.css.map */

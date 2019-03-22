@@ -1,27 +1,29 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Edit {{ item.name }}</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-</head>
-<body>
-    <form action="{{ url_for('editItem', item_id = item.id ) }}" method = 'post'>
-        <input type='text' size='30' name='name' value='{{ item.name }}' required>
-        <textarea rows='4' name='description' required>{{ item.description }}</textarea>
-        <input type='text' size='30' name='price' value='{{ item.price }}' required>
-        <select name='category' required>
-            {% for c in categories %}
-            {% if item.category_id == c.id %}
-            <option value="{{ c.id }}" selected="selected">{{ c.name }}</option>
-            {% else %}
-            <option value="{{ c.id }}">{{ c.name }}</option>
-            {% endif %}
-            {% endfor %}
-        </select>
-        <input type='submit' value='Edit'>
-    </form>
-    <a href = "{{ url_for('categories') }}">Home</a>
-</body>
-</html>
+{% extends "layout.html" %}
+
+{% block title %}
+    New item
+{% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='form.css') }}">
+{% endblock %}
+
+{% block content %}
+<form action="{{ url_for('editItem', item_id = item.id ) }}" method = 'post'>
+    <input type='text' size='30' name='name' value='{{ item.name }}' required>
+    <textarea rows='4' name='description' required>{{ item.description }}</textarea>
+    <input type='text' size='30' name='price' value='{{ item.price }}' required>
+    <select name='category' required>
+        {% for c in categories %}
+        {% if item.category_id == c.id %}
+        <option value="{{ c.id }}" selected="selected">{{ c.name }}</option>
+        {% else %}
+        <option value="{{ c.id }}">{{ c.name }}</option>
+        {% endif %}
+        {% endfor %}
+    </select>
+    <input type='submit' value='Edit'>
+    <a href="{{ url_for('item', item_id=item.id) }}">Cancel</a>
+</form>
+{% endblock %}

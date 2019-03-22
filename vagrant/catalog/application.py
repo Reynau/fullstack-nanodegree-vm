@@ -1,7 +1,11 @@
 from flask import Flask, render_template, url_for, redirect, request, jsonify, flash
+from flask import session as login_session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, Category, Item
+from google.oauth2 import id_token
+from google.auth.transport import requests
+import random, string
 app = Flask(__name__)
 
 
@@ -73,6 +77,9 @@ def item(item_id):
 
 @app.route('/items/new/', methods=['GET', 'POST'])
 def newItem():
+    if not login_session['sub']:
+        abort(401)
+    
     session = DBSession()
     categories = session.query(Category).all()
     if request.method == 'GET':
@@ -83,6 +90,7 @@ def newItem():
         newItem = Item(name = request.form['name'],
             description = request.form['description'],
             price = request.form['price'],
+            sub = login_session['sub'],
             category = category)
         session.add(newItem)
         session.commit()
@@ -94,6 +102,9 @@ def editItem(item_id):
     session = DBSession()
     categories = session.query(Category).all()
     item = session.query(Item).get(item_id)
+    if item.sub != login_session['sub']:
+        abort(401)
+
     if request.method == 'GET':
         return render_template('edit_item.html', categories=categories, item=item)
     else:
@@ -113,6 +124,9 @@ def editItem(item_id):
 def deleteItem(item_id):
     session = DBSession()
     item = session.query(Item).get(item_id)
+    if item.sub != login_session['sub']:
+        abort(401)
+
     category = session.query(Category).get(item.category_id)
     if request.method == 'GET':
         return render_template('delete_item.html', item=item)
@@ -138,6 +152,57 @@ def itemsJSON():
     items = session.query(Item).all()
     return jsonify(Items=[i.serialize for i in items])
 
+
+@app.route('/login')
+def login():
+    state = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in xrange(32))
+    login_session['state'] = state
+    return render_template('login.html', state=state)
+
+@app.route('/gconnect', methods=['POST'])
+def gconnect():
+    if request.args.get('state') != login_session['state']:
+        response = make_response(json.dumps('Invalid state parameter'), 401)
+        response.headers['Content-Type'] = 'application/json'
+        return response
+    token = request.data
+    
+    CLIENT_ID = '156073641325-5rkho3i0a7li1peok2i7i6v2nrdn8h4p.apps.googleusercontent.com'
+    try:
+        # Specify the CLIENT_ID of the app that accesses the backend:
+        idinfo = id_token.verify_oauth2_token(token, requests.Request(), CLIENT_ID)
+
+        # Or, if multiple clients access the backend server:
+        # idinfo = id_token.verify_oauth2_token(token, requests.Request())
+        # if idinfo['aud'] not in [CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3]:
+        #     raise ValueError('Could not verify audience.')
+
+        if idinfo['iss'] not in ['accounts.google.com', 'https://accounts.google.com']:
+            raise ValueError('Wrong issuer.')
+
+        # If auth request is from a G Suite domain:
+        # if idinfo['hd'] != GSUITE_DOMAIN_NAME:
+        #     raise ValueError('Wrong hosted domain.')
+
+        # ID token is valid. Get the user's Google Account ID from the decoded token.
+        login_session['sub'] = idinfo['sub']
+        login_session['name'] = idinfo['given_name']
+        login_session['surname'] = idinfo['family_name']
+        login_session['picture'] = idinfo['picture']
+
+    except ValueError:
+        # Invalid token
+        pass
+
+    return redirect(url_for('categories'))
+
+@app.route('/logout')
+def logout():
+    login_session.pop('sub', None)
+    login_session.pop('name', None)
+    login_session.pop('surname', None)
+    login_session.pop('picture', None)
+    return redirect(url_for('categories'))
 
 
 if __name__ == '__main__':

@@ -1,0 +1,14 @@
+<nav class="main-menu">
+    <a id="title" href = "{{ url_for('categories') }}">Catalog</a>
+    {% if session['sub'] %}
+    <div class="user">
+        Hello {{ session['name'] }}<br>
+        <a id="logout" href="{{ url_for('logout') }}">LOGOUT</a>
+    </div>
+    {% else %}
+    <div class="user">
+        <a id="login" href="{{ url_for('login') }}">LOGIN</a>
+    </div>
+    
+    {% endif %}
+</nav>
