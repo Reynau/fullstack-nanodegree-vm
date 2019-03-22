@@ -10,6 +10,7 @@
 {% endblock %}
 
 {% block content %}
+<h1>New Category</h1>
 <form action="{{ url_for('newCategory') }}" method = 'post'>
     <input type ='text' size='30' name='name' required>
     <input type='submit' value='Create'>
