@@ -104,7 +104,7 @@ a {
 }
 
 .container {
-  margin: 50px 200px 0 200px;
+  margin: 25px 200px 0 200px;
 }
 
 .items {
@@ -112,11 +112,24 @@ a {
 }
 
 .items a {
-  background-color: #3EC142;
-  color: white;
-  border: 0;
-  padding: 15px;
-  border-radius: 4px;
-  margin: 10px 5px;
+  display: inline-block;
+  margin: 2px 0;
+}
+
+.items a div {
+  color: #353535;
+  text-align: center;
+  padding: 20px;
+  border: 1px solid rgba(53, 53, 53, 0.1);
+}
+
+.items a div img {
+  display: block;
+  width: 150px;
+  max-height: 150px;
+}
+
+.items a:hover div {
+  border: 1px solid rgba(53, 53, 53, 0.2);
 }
 /*# sourceMappingURL=styles.css.map */

@@ -1,6 +1,7 @@
 import os
 import sys
-from sqlalchemy import Column, ForeignKey, Integer, String
+import datetime
+from sqlalchemy import Column, ForeignKey, Integer, String, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from sqlalchemy import create_engine
@@ -29,6 +30,8 @@ class Item(Base):
     description = Column(String(250))
     price = Column(String(8))
     sub = Column(String(250))
+    image = Column(String(250))
+    timestamp = Column(DateTime, default=datetime.datetime.utcnow)
     category_id = Column(Integer,ForeignKey('categories.id'))
     category = relationship(Category) 
 
@@ -41,6 +44,8 @@ class Item(Base):
            'description'    : self.description,
            'sub'            : self.sub,
            'price'          : self.price,
+           'image'          : self.image,
+           'timestamp'      : self.timestamp,
            'category'       : self.category_id,
        }
  

@@ -19,8 +19,8 @@ DBSession = sessionmaker(bind=engine)
 def categories():
     session = DBSession()
     categories = session.query(Category).all()
-    items = session.query(Item).all()
-    return render_template('index.html', categories=categories, items=items)
+    new_items = session.query(Item).order_by(Item.timestamp.desc()).limit(5).all()
+    return render_template('index.html', categories=categories, items=new_items)
 
 @app.route('/categories/<int:category_id>/')
 def category(category_id):
@@ -90,8 +90,9 @@ def newItem():
         newItem = Item(name = request.form['name'],
             description = request.form['description'],
             price = request.form['price'],
-            sub = login_session['sub'],
-            category = category)
+            image = request.form['image'],
+            category = category,
+            sub = login_session['sub'])
         session.add(newItem)
         session.commit()
         flash("New Item created!")
@@ -114,6 +115,7 @@ def editItem(item_id):
         item.name = request.form['name']
         item.description = request.form['description']
         item.price = request.form['price']
+        item.image = request.form['image']
         item.category = category
         session.add(item)
         session.commit()

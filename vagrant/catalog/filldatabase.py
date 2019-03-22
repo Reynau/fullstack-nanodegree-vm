@@ -31,6 +31,42 @@ category3 = Category(name = "Baseball")
 session.add(category3)
 session.commit()
 
-item = Item(name = "Veggie Burger", description = "Juicy grilled veggie patty with tomato mayo and lettuce", sub = "1", price = "$7.50", category = category)
+item = Item(name = "Veggie Burger", description = "Juicy grilled veggie patty with tomato mayo and lettuce", sub = "1", price = "$7.50", image="https://www.seriouseats.com/recipes/images/2015/07/20150702-sous-vide-hamburger-anova-primary-1500x1125.jpg", category = category)
+session.add(item)
+session.commit()
+
+item = Item(name = "Veggie Burger 2", description = "Juicy grilled veggie patty with tomato mayo and lettuce", sub = "1", price = "$7.50", image="https://www.seriouseats.com/recipes/images/2015/07/20150702-sous-vide-hamburger-anova-primary-1500x1125.jpg", category = category)
+session.add(item)
+session.commit()
+
+item = Item(name = "Veggie Burger 3", description = "Juicy grilled veggie patty with tomato mayo and lettuce", sub = "1", price = "$7.50", image="https://www.seriouseats.com/recipes/images/2015/07/20150702-sous-vide-hamburger-anova-primary-1500x1125.jpg", category = category2)
+session.add(item)
+session.commit()
+
+item = Item(name = "Veggie Burger 4", description = "Juicy grilled veggie patty with tomato mayo and lettuce", sub = "1", price = "$7.50", image="https://www.seriouseats.com/recipes/images/2015/07/20150702-sous-vide-hamburger-anova-primary-1500x1125.jpg", category = category3)
+session.add(item)
+session.commit()
+
+item = Item(name = "Veggie Burger 5", description = "Juicy grilled veggie patty with tomato mayo and lettuce", sub = "1", price = "$7.50", image="https://www.seriouseats.com/recipes/images/2015/07/20150702-sous-vide-hamburger-anova-primary-1500x1125.jpg", category = category2)
+session.add(item)
+session.commit()
+
+item = Item(name = "Veggie Burger 6", description = "Juicy grilled veggie patty with tomato mayo and lettuce", sub = "1", price = "$7.50", image="https://www.seriouseats.com/recipes/images/2015/07/20150702-sous-vide-hamburger-anova-primary-1500x1125.jpg", category = category3)
+session.add(item)
+session.commit()
+
+item = Item(name = "Veggie Burger 7", description = "Juicy grilled veggie patty with tomato mayo and lettuce", sub = "1", price = "$7.50", image="https://www.seriouseats.com/recipes/images/2015/07/20150702-sous-vide-hamburger-anova-primary-1500x1125.jpg", category = category3)
+session.add(item)
+session.commit()
+
+item = Item(name = "Veggie Burger 8", description = "Juicy grilled veggie patty with tomato mayo and lettuce", sub = "1", price = "$7.50", image="https://www.seriouseats.com/recipes/images/2015/07/20150702-sous-vide-hamburger-anova-primary-1500x1125.jpg", category = category3)
+session.add(item)
+session.commit()
+
+item = Item(name = "Veggie Burger 9", description = "Juicy grilled veggie patty with tomato mayo and lettuce", sub = "1", price = "$7.50", image="https://www.seriouseats.com/recipes/images/2015/07/20150702-sous-vide-hamburger-anova-primary-1500x1125.jpg", category = category)
+session.add(item)
+session.commit()
+
+item = Item(name = "Veggie Burger 10", description = "Juicy grilled veggie patty with tomato mayo and lettuce", sub = "1", price = "$7.50", image="https://www.seriouseats.com/recipes/images/2015/07/20150702-sous-vide-hamburger-anova-primary-1500x1125.jpg", category = category)
 session.add(item)
 session.commit()

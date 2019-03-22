@@ -103,18 +103,32 @@ a {
 }
 
 .container {
-    margin: $margin/4 $margin 0 $margin;
+    margin: $margin/8 $margin 0 $margin;
 }
 
 .items {
     grid-area: items;
 
     a {
-        background-color: $green;
-        color: white;
-        border: 0;
-        padding: 15px;
-        border-radius: 4px;
-        margin: 10px 5px;
+        display: inline-block;
+        margin: 2px 0;
+        div {
+            color: $black;
+            text-align: center;
+            padding: 20px;
+            border: 1px solid rgba($black, 0.1);
+
+            img {
+                display: block;
+                width: 150px;
+                max-height: 150px;
+            }
+        }
+    }
+
+    a:hover {
+        div {
+            border: 1px solid rgba($black, 0.2);
+        }
     }
 }

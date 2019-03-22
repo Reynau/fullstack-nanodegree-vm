@@ -1,0 +1,14 @@
+.item {
+  margin: 0 auto;
+  width: 60%;
+  text-align: center;
+}
+
+.item .description {
+  font-size: 18px;
+}
+
+.item .price {
+  font-size: 15px;
+}
+/*# sourceMappingURL=item.css.map */

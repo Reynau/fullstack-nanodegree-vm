@@ -33,7 +33,12 @@
         <h2>Newest items</h2>
         {% for i in items %}
 
-        <a href="{{ url_for('item', item_id = i.id) }}">{{ i.name }}</a>
+        <a href="{{ url_for('item', item_id = i.id) }}">
+            <div>
+                <img src="{{ i.image }}" width="150px">
+                {{ i.name }}
+            </div>
+        </a>
 
         {% endfor %}
     </div>
