@@ -1,16 +1,17 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>New Category</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-</head>
-<body>
-    <form action="{{ url_for('newCategory') }}" method = 'post'>
-        <input type ='text' size='30' name='name' required>
-        <input type='submit' value='Create'>
-    </form>
-    <a href = "{{ url_for('categories') }}">Home</a>
-</body>
-</html>
+{% extends "layout.html" %}
+
+{% block title %}
+    New category
+{% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='form.css') }}">
+{% endblock %}
+
+{% block content %}
+<form action="{{ url_for('newCategory') }}" method = 'post'>
+    <input type ='text' size='30' name='name' required>
+    <input type='submit' value='Create'>
+</form>
+{% endblock %}
