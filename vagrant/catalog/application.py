@@ -1,26 +1,56 @@
-from flask import Flask, render_template, url_for, redirect, request, jsonify, flash
+from flask import Flask, render_template, url_for, redirect, request, jsonify, flash, jsonify, abort
+import flask
 from flask import session as login_session
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, Category, Item
-from google.oauth2 import id_token
-from google.auth.transport import requests
+
+import firebase_admin
+from firebase_admin import credentials, auth
+
+from flask_wtf.csrf import CSRFProtect, CSRFError
+
 import random, string
+import datetime
+
 app = Flask(__name__)
 
+# CSRF protection for requests
+csrf = CSRFProtect(app)
+csrf.init_app(app)
 
+# Database initialization
 engine = create_engine('sqlite:///catalog.db')
 Base.metadata.bind = engine
 
 DBSession = sessionmaker(bind=engine)
 
+# Firebase initialization (Auth)
+cred = credentials.Certificate("credentials/cred.json")
+firebase_admin.initialize_app(cred)
+
 @app.route('/')
 @app.route('/categories')
 def categories():
-    session = DBSession()
-    categories = session.query(Category).all()
-    new_items = session.query(Item).order_by(Item.timestamp.desc()).limit(5).all()
-    return render_template('index.html', categories=categories, items=new_items)
+    session_cookie = flask.request.cookies.get('session')
+    # Verify the session cookie. In this case an additional check is added to detect
+    # if the user's Firebase session was revoked, user deleted/disabled, etc.
+    try:
+        auth.verify_session_cookie(session_cookie, check_revoked=True)
+        session = DBSession()
+        categories = session.query(Category).all()
+        new_items = session.query(Item).order_by(Item.timestamp.desc()).limit(5).all()
+        return render_template('index.html', categories=categories, items=new_items)
+    except ValueError as e:
+        # Session cookie is unavailable or invalid. Force user to login.
+        print(e)
+        return flask.redirect('/login?mode=select&signInSuccessUrl=categories')
+    except auth.AuthError as e:
+        # Session revoked. Force user to login.
+        print(e)
+        return flask.redirect('/login?mode=select&signInSuccessUrl=categories')
+    
 
 @app.route('/categories/<int:category_id>/')
 def category(category_id):
@@ -161,42 +191,24 @@ def login():
     login_session['state'] = state
     return render_template('login.html', state=state)
 
-@app.route('/gconnect', methods=['POST'])
-def gconnect():
-    if request.args.get('state') != login_session['state']:
-        response = make_response(json.dumps('Invalid state parameter'), 401)
-        response.headers['Content-Type'] = 'application/json'
-        return response
-    token = request.data
-    
-    CLIENT_ID = '156073641325-5rkho3i0a7li1peok2i7i6v2nrdn8h4p.apps.googleusercontent.com'
+@app.route('/sessionLogin', methods=['POST'])
+def sessionLogin():
+    # Get the ID token sent by the client
+    idToken = request.data
+    # Set session expiration to 5 days.
+    expires_in = datetime.timedelta(days=5)
     try:
-        # Specify the CLIENT_ID of the app that accesses the backend:
-        idinfo = id_token.verify_oauth2_token(token, requests.Request(), CLIENT_ID)
-
-        # Or, if multiple clients access the backend server:
-        # idinfo = id_token.verify_oauth2_token(token, requests.Request())
-        # if idinfo['aud'] not in [CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3]:
-        #     raise ValueError('Could not verify audience.')
-
-        if idinfo['iss'] not in ['accounts.google.com', 'https://accounts.google.com']:
-            raise ValueError('Wrong issuer.')
-
-        # If auth request is from a G Suite domain:
-        # if idinfo['hd'] != GSUITE_DOMAIN_NAME:
-        #     raise ValueError('Wrong hosted domain.')
-
-        # ID token is valid. Get the user's Google Account ID from the decoded token.
-        login_session['sub'] = idinfo['sub']
-        login_session['name'] = idinfo['given_name']
-        login_session['surname'] = idinfo['family_name']
-        login_session['picture'] = idinfo['picture']
-
-    except ValueError:
-        # Invalid token
-        pass
-
-    return redirect(url_for('categories'))
+        # Create the session cookie. This will also verify the ID token in the process.
+        # The session cookie will have the same claims as the ID token.
+        session_cookie = auth.create_session_cookie(idToken, expires_in=expires_in)
+        response = jsonify({'status': 'success'})
+        # Set cookie policy for session cookie.
+        expires = datetime.datetime.now() + expires_in
+        response.set_cookie(
+            'session', session_cookie, expires=expires, httponly=True) # Should add secure=True if https is available
+        return response
+    except auth.AuthError:
+        return abort(401, 'Failed to create a session cookie')
 
 @app.route('/logout')
 def logout():

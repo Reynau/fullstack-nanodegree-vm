@@ -1,43 +1,92 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Login</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+{% extends "layout.html" %}
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
-    <meta name="google-signin-client_id" content="156073641325-5rkho3i0a7li1peok2i7i6v2nrdn8h4p.apps.googleusercontent.com">
-</head>
-<body>
+{% block title %}
+    Login
+{% endblock %}
 
-<div class="g-signin2" data-onsuccess="onSignIn"></div>
+{% block head %}
+    {{ super() }}
+    <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.css" />
+{% endblock %}
 
-<script>
-    function onSignIn(googleUser) {
-        // Useful data for your client-side scripts:
-        var profile = googleUser.getBasicProfile();
-        console.log("ID: " + profile.getId()); // Don't send this directly to your server!
-        console.log('Full Name: ' + profile.getName());
-        console.log('Given Name: ' + profile.getGivenName());
-        console.log('Family Name: ' + profile.getFamilyName());
-        console.log("Image URL: " + profile.getImageUrl());
-        console.log("Email: " + profile.getEmail());
+{% block admin_navbar %}
+    {% if session['sub'] %}
+    <nav class="admin-nav">
+        <!--<a href = "{{ url_for('newCategory') }}">Create New Category</a>-->
+        <a href = "{{ url_for('newItem') }}">Create New Item</a>
+    </nav>
+    {% endif %}
+    
+{% endblock %}
 
-        // The ID token you need to pass to your backend:
-        var id_token = googleUser.getAuthResponse().id_token;
-        console.log("ID Token: " + id_token);
+{% block content %}
+    <div id="firebaseui-auth-container"></div>
+    <div id="loader">Loading...</div>
 
-        var xhr = new XMLHttpRequest();
-        xhr.open('POST', '/gconnect?state={{state}}');
-        xhr.setRequestHeader('Content-Type', 'application/octet-stream; charset=utf-8');
-        xhr.onload = function() {
-            console.log('Signed in as: ' + xhr.responseText);
-        };
-        xhr.send(id_token);
-    }
-</script>
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/5.11.1/firebase-app.js"></script>
 
-</body>
-</html>
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+        https://firebase.google.com/docs/web/setup#config-web-app -->
+    <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-auth.js"></script>
+
+    <script src="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.js"></script>
+
+    <script>
+    // Your web app's Firebase configuration
+    var firebaseConfig = {
+        apiKey: "AIzaSyDqEByMWJMLtKx9wmbYiuStZVMfKahWLdU",
+        authDomain: "catalog-udacity-235218.firebaseapp.com",
+        databaseURL: "https://catalog-udacity-235218.firebaseio.com",
+        projectId: "catalog-udacity-235218",
+        storageBucket: "catalog-udacity-235218.appspot.com",
+        messagingSenderId: "156073641325",
+        appId: "1:156073641325:web:b844df46a89d9d1c"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+
+    // As httpOnly cookies are to be used, do not persist any state client side.
+    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.NONE);
+    // Initialize the FirebaseUI Widget using Firebase.
+    var ui = new firebaseui.auth.AuthUI(firebase.auth());
+    var uiConfig = {
+        callbacks: {
+            signInSuccessWithAuthResult: function(authResult, redirectUrl) {
+                // User successfully signed in.
+                // Return type determines whether we continue the redirect automatically
+                // or whether we leave that to developer to handle.
+                var firebaseUser = authResult.user;
+                firebaseUser.getIdToken(true).then(idToken  => {
+                    // Get CSRF token
+                    var csrf_token = "{{ csrf_token() }}";
+                    // Send token to your backend via HTTPS
+                    var xhr = new XMLHttpRequest();
+                    xhr.open('POST', '/sessionLogin');
+                    xhr.setRequestHeader('Content-Type', 'application/octet-stream; charset=utf-8');
+                    xhr.setRequestHeader('X-CSRFToken', csrf_token);
+                    xhr.send(idToken);
+                    xhr.onload = function() {
+                        console.log('finished')
+                        window.location.assign(redirectUrl);
+                    };
+                }); // forceRefresh = true
+                
+            },
+            uiShown: function() {
+                // The widget is rendered.
+                // Hide the loader.
+                document.getElementById('loader').style.display = 'none';
+            }
+        },
+        signInFlow: 'popup',
+        signInSuccessUrl: 'categories',
+        signInOptions: [
+            // List of OAuth providers supported.
+            firebase.auth.GoogleAuthProvider.PROVIDER_ID
+        ],
+        // Other config options...
+    };
+    ui.start('#firebaseui-auth-container', uiConfig);
+    </script>
+{% endblock %}
