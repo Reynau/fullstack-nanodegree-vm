@@ -1,14 +1,14 @@
-.item {
+.page_content {
   margin: 0 auto;
   width: 60%;
   text-align: center;
 }
 
-.item .description {
+.page_content .description {
   font-size: 18px;
 }
 
-.item .price {
+.page_content .price {
   font-size: 15px;
 }
 /*# sourceMappingURL=item.css.map */

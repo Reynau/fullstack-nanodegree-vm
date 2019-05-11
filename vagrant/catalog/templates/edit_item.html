@@ -12,6 +12,7 @@
 {% block content %}
 <form action="{{ url_for('editItem', item_id = item.id ) }}" method = 'post'>
     <h1>Edit item {{ item.name }}</h1>
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
     <input type='text' size='30' name='name' value='{{ item.name }}' required>
     <textarea rows='4' name='description' required>{{ item.description }}</textarea>
     <input type='text' size='30' name='price' value='{{ item.price }}' required>

@@ -1,6 +1,6 @@
-from flask import Flask, render_template, url_for, redirect, request, jsonify, flash, jsonify, abort
 import flask
-from flask import session as login_session
+from flask import Flask, render_template, url_for, redirect, request, jsonify, flash, jsonify, abort, session as login_session
+from functools import wraps
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -30,26 +30,67 @@ DBSession = sessionmaker(bind=engine)
 cred = credentials.Certificate("credentials/cred.json")
 firebase_admin.initialize_app(cred)
 
-@app.route('/')
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        session_cookie = request.cookies.get('session')
+        # Verify the session cookie. In this case an additional check is added to detect
+        # if the user's Firebase session was revoked, user deleted/disabled, etc.
+        try:
+            decoded_claims = auth.verify_session_cookie(session_cookie, check_revoked=True)
+            return f(*args, **kwargs)
+        except ValueError as e:
+            # Session cookie is unavailable or invalid. Force user to login.
+            print(e)
+            return redirect(url_for('login', mode="select", signInSuccessUrl=request.url))
+        except auth.AuthError as e:
+            # Session revoked. Force user to login.
+            print(e)
+            return redirect(url_for('login', mode="select", signInSuccessUrl=request.url))
+    return decorated_function
+
+def admin_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        session_cookie = request.cookies.get('session')
+        # Verify the session cookie. In this case an additional check is added to detect
+        # if the user's Firebase session was revoked, user deleted/disabled, etc.
+        try:
+            decoded_claims = auth.verify_session_cookie(session_cookie, check_revoked=True)
+            if decoded_claims.get('admin') is False:
+                return abort(401, 'Insufficient permissions')
+            return f(*args, **kwargs)
+        except ValueError as e:
+            # Session cookie is unavailable or invalid. Force user to login.
+            print(e)
+            return redirect(url_for('login', mode="select", signInSuccessUrl=request.url))
+        except auth.AuthError as e:
+            # Session revoked. Force user to login.
+            print(e)
+            return redirect(url_for('login', mode="select", signInSuccessUrl=request.url))
+    return decorated_function
+
 @app.route('/categories')
+@app.route('/')
 def categories():
-    session_cookie = flask.request.cookies.get('session')
+    session = DBSession()
+    categories = session.query(Category).all()
+    new_items = session.query(Item).order_by(Item.timestamp.desc()).limit(5).all()
+
+    session_cookie = request.cookies.get('session')
     # Verify the session cookie. In this case an additional check is added to detect
     # if the user's Firebase session was revoked, user deleted/disabled, etc.
     try:
         auth.verify_session_cookie(session_cookie, check_revoked=True)
-        session = DBSession()
-        categories = session.query(Category).all()
-        new_items = session.query(Item).order_by(Item.timestamp.desc()).limit(5).all()
-        return render_template('index.html', categories=categories, items=new_items)
+        return render_template('index.html', items=new_items, logged=True)
     except ValueError as e:
         # Session cookie is unavailable or invalid. Force user to login.
         print(e)
-        return flask.redirect('/login?mode=select&signInSuccessUrl=categories')
+        return render_template('index.html', items=new_items, logged=False)
     except auth.AuthError as e:
         # Session revoked. Force user to login.
         print(e)
-        return flask.redirect('/login?mode=select&signInSuccessUrl=categories')
+        return render_template('index.html', items=new_items, logged=False)
     
 
 @app.route('/categories/<int:category_id>/')
@@ -57,39 +98,58 @@ def category(category_id):
     session = DBSession()
     category = session.query(Category).get(category_id)
     items = session.query(Item).filter_by(category_id=category.id).all()
-    return render_template('category.html', category=category, items=items)
+
+    session_cookie = request.cookies.get('session')
+    # Verify the session cookie. In this case an additional check is added to detect
+    # if the user's Firebase session was revoked, user deleted/disabled, etc.
+    try:
+        auth.verify_session_cookie(session_cookie, check_revoked=True)
+        return render_template('category.html', category=category, items=items, logged=True)
+    except ValueError as e:
+        # Session cookie is unavailable or invalid. Force user to login.
+        print(e)
+        return render_template('category.html', category=category, items=items, logged=False)
+    except auth.AuthError as e:
+        # Session revoked. Force user to login.
+        print(e)
+        return render_template('category.html', category=category, items=items, logged=False)
 
 @app.route('/categories/new/', methods=['GET', 'POST'])
+@admin_required
 def newCategory():
-    session = DBSession()
     if request.method == 'GET':
-        return render_template('new_category.html')
+        return render_template('new_category.html', logged=True)
     else:
         newCategory = Category(name = request.form['name'])
+        session = DBSession()
         session.add(newCategory)
         session.commit()
         flash("New Category created!")
         return redirect(url_for('category', category_id = newCategory.id))
 
+
 @app.route('/categories/<int:category_id>/edit/', methods=['GET', 'POST'])
+@admin_required
 def editCategory(category_id):
     session = DBSession()
     category = session.query(Category).get(category_id)
     if request.method == 'GET':
-        return render_template('edit_category.html', category=category)
+        return render_template('edit_category.html', category=category, logged=True)
     else:
         category.name = request.form['name']
         session.add(category)
         session.commit()
         flash("Category updated correctly!")
-        return redirect(url_for('category', category_id = category_id))
+        return redirect(url_for('category', category_id = category_id, logged=True))
+
 
 @app.route('/categories/<int:category_id>/delete/', methods=['GET', 'POST'])
-def deleteCategory(category_id):
+@admin_required
+def deleteCategory(category_id):       
     session = DBSession()
     category = session.query(Category).get(category_id)
     if request.method == 'GET':
-        return render_template('delete_category.html', category=category)
+        return render_template('delete_category.html', category=category, logged=True)
     else:
         session.delete(category)
         session.commit()
@@ -97,23 +157,37 @@ def deleteCategory(category_id):
         return redirect(url_for('categories'))
 
 
-
-
 @app.route('/items/<int:item_id>/')
 def item(item_id):
     session = DBSession()
     item = session.query(Item).get(item_id)
-    return render_template('item.html', item=item)
+
+    session_cookie = flask.request.cookies.get('session')
+    # Verify the session cookie. In this case an additional check is added to detect
+    # if the user's Firebase session was revoked, user deleted/disabled, etc.
+    try:
+        auth.verify_session_cookie(session_cookie, check_revoked=True)
+        return render_template('item.html', item=item, logged=True)
+    except ValueError as e:
+        # Session cookie is unavailable or invalid. Force user to login.
+        print(e)
+        return render_template('item.html', item=item, logged=False)
+    except auth.AuthError as e:
+        # Session revoked. Force user to login.
+        print(e)
+        return render_template('item.html', item=item, logged=False)
+
 
 @app.route('/items/new/', methods=['GET', 'POST'])
 def newItem():
-    if not login_session['sub']:
-        abort(401)
-    
+    session_cookie = flask.request.cookies.get('session')
+    decoded_claims = auth.verify_session_cookie(session_cookie, check_revoked=True)
+
     session = DBSession()
     categories = session.query(Category).all()
+    new_items = session.query(Item).order_by(Item.timestamp.desc()).limit(5).all()
     if request.method == 'GET':
-        return render_template('new_item.html', categories=categories)
+        return render_template('new_item.html', items=new_items, logged=True)
     else:
         category_id = request.form['category']
         category = session.query(Category).get(category_id)
@@ -122,20 +196,25 @@ def newItem():
             price = request.form['price'],
             image = request.form['image'],
             category = category,
-            sub = login_session['sub'])
+            sub = decoded_claims['sub'])
         session.add(newItem)
         session.commit()
         flash("New Item created!")
         return redirect(url_for('item', item_id = newItem.id))
 
-@app.route('/items/<int:item_id>/edit/', methods=['GET', 'POST'])
-def editItem(item_id):
-    session = DBSession()
-    categories = session.query(Category).all()
-    item = session.query(Item).get(item_id)
-    if item.sub != login_session['sub']:
-        abort(401)
 
+@app.route('/items/<int:item_id>/edit/', methods=['GET', 'POST'])
+@login_required
+def editItem(item_id):
+    session_cookie = flask.request.cookies.get('session')
+    decoded_claims = auth.verify_session_cookie(session_cookie, check_revoked=True)
+
+    session = DBSession()
+    item = session.query(Item).get(item_id)
+    if item.sub != decoded_claims['sub']:
+        return flask.abort(401, 'Insufficient permissions')
+
+    categories = session.query(Category).all()
     if request.method == 'GET':
         return render_template('edit_item.html', categories=categories, item=item)
     else:
@@ -152,12 +231,17 @@ def editItem(item_id):
         flash("Item updated correctly!")
         return redirect(url_for('item', item_id = item_id))
 
+
 @app.route('/items/<int:item_id>/delete/', methods=['GET', 'POST'])
+@login_required
 def deleteItem(item_id):
+    session_cookie = flask.request.cookies.get('session')
+    decoded_claims = auth.verify_session_cookie(session_cookie, check_revoked=True)
+    
     session = DBSession()
     item = session.query(Item).get(item_id)
-    if item.sub != login_session['sub']:
-        abort(401)
+    if item.sub != decoded_claims['sub']:
+        return flask.abort(401, 'Insufficient permissions')
 
     category = session.query(Category).get(item.category_id)
     if request.method == 'GET':
@@ -185,11 +269,11 @@ def itemsJSON():
     return jsonify(Items=[i.serialize for i in items])
 
 
+
+
 @app.route('/login')
 def login():
-    state = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in xrange(32))
-    login_session['state'] = state
-    return render_template('login.html', state=state)
+    return render_template('login.html')
 
 @app.route('/sessionLogin', methods=['POST'])
 def sessionLogin():
@@ -213,11 +297,16 @@ def sessionLogin():
 @app.route('/logout')
 def logout():
     login_session.pop('sub', None)
-    login_session.pop('name', None)
-    login_session.pop('surname', None)
-    login_session.pop('picture', None)
-    return redirect(url_for('categories'))
+    response = flask.make_response(redirect(request.referrer))
+    response.set_cookie('session', expires=0)
+    return response
 
+@app.context_processor
+def base_template_vars():
+    session = DBSession()
+    categories = session.query(Category).all()
+    return dict(categories=categories)
+    
 
 if __name__ == '__main__':
     app.secret_key = 'b4thHhB3bjoO0pdXTsQo3GGsJKKEQQ'

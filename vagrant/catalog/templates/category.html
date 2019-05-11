@@ -4,6 +4,11 @@
     {{ category.name }}
 {% endblock %}
 
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='double_column.css') }}">
+{% endblock %}
+
 {% block admin_navbar %}
     <!--
     <nav class="admin-nav">
@@ -16,12 +21,20 @@
 {% endblock %}
 
 {% block content %}
-    <h1>{{ category.name }}</h1>
-    <div class="items">
-        <h2>Items</h2>
-        
-        {% for i in items %}
-        <a href="{{ url_for('item', item_id=i.id) }}">{{ i.name }}</a>
-        {% endfor %}
+    {% include 'sidebar.html' %}
+    <div class="page_content">
+        <h1>{{ category.name }}</h1>
+        <div class="items">
+            <h2>Items</h2>
+            
+            {% for i in items %}
+            <a href="{{ url_for('item', item_id = i.id) }}">
+                <div>
+                    <img src="{{ i.image }}" width="150px">
+                    {{ i.name }}
+                </div>
+            </a>
+            {% endfor %}
+        </div>
     </div>
 {% endblock %}

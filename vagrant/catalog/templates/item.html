@@ -7,6 +7,7 @@
 {% block head %}
     {{ super() }}
     <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='item.css') }}">
+    <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='double_column.css') }}">
 {% endblock %}
 
 {% block admin_navbar %}
@@ -19,7 +20,8 @@
 {% endblock %}
 
 {% block content %}
-    <div class="item">
+    {% include 'sidebar.html' %}
+    <div class="page_content">
         <img src="{{ item.image }}" width="500px">
         <h1>{{ item.name }}</h1>
         <p class="description">{{ item.description }}</p>

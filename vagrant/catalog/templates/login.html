@@ -9,16 +9,6 @@
     <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.css" />
 {% endblock %}
 
-{% block admin_navbar %}
-    {% if session['sub'] %}
-    <nav class="admin-nav">
-        <!--<a href = "{{ url_for('newCategory') }}">Create New Category</a>-->
-        <a href = "{{ url_for('newItem') }}">Create New Item</a>
-    </nav>
-    {% endif %}
-    
-{% endblock %}
-
 {% block content %}
     <div id="firebaseui-auth-container"></div>
     <div id="loader">Loading...</div>
@@ -68,7 +58,10 @@
                     xhr.send(idToken);
                     xhr.onload = function() {
                         console.log('finished')
-                        window.location.assign(redirectUrl);
+                        if (redirectUrl && redirectUrl !== "None")
+                            window.location.assign(redirectUrl);
+                        else
+                            window.location.assign('categories');
                     };
                 }); // forceRefresh = true
                 

@@ -7,10 +7,11 @@
 {% block head %}
     {{ super() }}
     <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='index.css') }}">
+    <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='double_column.css') }}">
 {% endblock %}
 
 {% block admin_navbar %}
-    {% if session['sub'] %}
+    {% if logged %}
     <nav class="admin-nav">
         <!--<a href = "{{ url_for('newCategory') }}">Create New Category</a>-->
         <a href = "{{ url_for('newItem') }}">Create New Item</a>
@@ -20,16 +21,8 @@
 {% endblock %}
 
 {% block content %}
-    <div class="categories">
-        <h2>Categories</h2>
-        <ul>
-            {% for c in categories %}
-            <li><a href="{{ url_for('category', category_id = c.id) }}">{{ c.name }}</a></li>
-            {% endfor %}
-        </ul>
-    </div>
-
-    <div class="items">
+    {% include 'sidebar.html' %}
+    <div class="page_content">
         <h2>Newest items</h2>
         {% for i in items %}
 

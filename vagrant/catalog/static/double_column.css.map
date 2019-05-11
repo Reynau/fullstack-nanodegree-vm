@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "AAAA,AAAA,UAAU,CAAC;EACP,OAAO,EAAE,IAAI;EACb,mBAAmB,EACf,uCACoB;EAExB,qBAAqB,EAAE,gBAAgB;CAC1C",
+    "sources": [
+        "double_column.scss"
+    ],
+    "names": [],
+    "file": "double_column.css"
+}

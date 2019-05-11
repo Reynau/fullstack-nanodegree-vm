@@ -11,6 +11,7 @@
 
 {% block content %}
 <form action="{{ url_for('deleteItem', item_id=item.id ) }}" method = 'post'>
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
     <input type='submit' value='Delete item {{ item.name }}'>
     <a href="{{ url_for('item', item_id=item.id) }}">Cancel</a>
 </form>
