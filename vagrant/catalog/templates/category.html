@@ -10,14 +10,13 @@
 {% endblock %}
 
 {% block admin_navbar %}
-    <!--
+    {% if logged %}
+    {% endif %}
     <nav class="admin-nav">
-        <ul>
-            <li><a href="{{ url_for('editCategory', category_id = category.id) }}">Edit</a></li>
-            <li><a href="{{ url_for('deleteCategory', category_id = category.id) }}">Delete</a></li>
-        </ul>
+        <a href = "{{ url_for('newItem') }}">Create New Item</a>
+        <a href="{{ url_for('editCategory', category_id = category.id) }}">Edit Category</a>
+        <a href="{{ url_for('deleteCategory', category_id = category.id) }}">Delete Category</a>
     </nav>
-    -->
 {% endblock %}
 
 {% block content %}

@@ -6,14 +6,13 @@
 
 {% block head %}
     {{ super() }}
-    <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='index.css') }}">
     <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='double_column.css') }}">
 {% endblock %}
 
 {% block admin_navbar %}
     {% if logged %}
     <nav class="admin-nav">
-        <!--<a href = "{{ url_for('newCategory') }}">Create New Category</a>-->
+        <a href = "{{ url_for('newCategory') }}">Create New Category</a>
         <a href = "{{ url_for('newItem') }}">Create New Item</a>
     </nav>
     {% endif %}
