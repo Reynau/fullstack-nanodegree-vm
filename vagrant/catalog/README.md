@@ -13,7 +13,6 @@ Catalog application developed using [Flask](http://flask.pocoo.org/) that allows
 All the server code is contained inside the application.py file, separated on different functional parts by visible code commentaries. Inside the templates folder you will find all the Jinja2 templates, and inside the static folder you will find all the scss and css generated styles.
 
 
-
 ## Requirements
 
 - [Vagrant](https://www.vagrantup.com/)
@@ -28,7 +27,6 @@ $ cd vagrant
 $ vagrant up
 $ vagrant ssh
 vagrant@vagrant$ cd /vagrant/catalog
-vagrant@vagrant$ source /env/bin/activate
-(env) vagrant@vagrant$ python database_setup.py
-(env) vagrant@vagrant$ python application.py
+vagrant@vagrant$ python database_setup.py
+vagrant@vagrant$ python application.py
 ```

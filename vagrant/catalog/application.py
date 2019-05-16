@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 from flask import *
 from functools import wraps
 
