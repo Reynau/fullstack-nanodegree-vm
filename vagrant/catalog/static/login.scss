@@ -1,0 +1,25 @@
+$margin: 200px;
+$black: #353535;
+$blue: #2E467C;
+$green: #3EC142;
+$red: #E0353B;
+
+.login-container {
+    margin: 0 auto; 
+    width:60%;
+    background-color: rgba($black, 0.1);
+    border-radius: 5px;
+    border: solid 1px rgba($black, 0.2);
+
+    display: grid;
+    grid-template-rows: 40vh;
+
+    .g-signin2{
+        width: 100%;
+        align-self: center;
+    }
+    
+    .g-signin2 > div{
+        margin: 0 auto;
+    }
+}

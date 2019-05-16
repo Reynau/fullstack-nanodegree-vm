@@ -7,19 +7,21 @@
 {% block head %}
     {{ super() }}
     <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='item.css') }}">
+    <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='double_column.css') }}">
 {% endblock %}
 
 {% block admin_navbar %}
     {% if item.sub == session['sub'] %}
     <nav class="admin-nav">
-        <a href="{{ url_for('editItem', item_id=item.id) }}">Edit</a>
-        <a class="delete" href="{{ url_for('deleteItem', item_id=item.id) }}">Delete</a>
+        <a href="{{ url_for('editItem', item_id=item.id) }}">Edit item</a>
+        <a class="delete" href="{{ url_for('deleteItem', item_id=item.id) }}">Delete item</a>
     </nav>
     {% endif %}
 {% endblock %}
 
 {% block content %}
-    <div class="item">
+    {% include 'sidebar.html' %}
+    <div class="page_content">
         <img src="{{ item.image }}" width="500px">
         <h1>{{ item.name }}</h1>
         <p class="description">{{ item.description }}</p>

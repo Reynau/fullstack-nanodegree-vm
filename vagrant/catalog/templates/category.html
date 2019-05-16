@@ -4,24 +4,36 @@
     {{ category.name }}
 {% endblock %}
 
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='double_column.css') }}">
+{% endblock %}
+
 {% block admin_navbar %}
-    <!--
-    <nav class="admin-nav">
-        <ul>
-            <li><a href="{{ url_for('editCategory', category_id = category.id) }}">Edit</a></li>
-            <li><a href="{{ url_for('deleteCategory', category_id = category.id) }}">Delete</a></li>
-        </ul>
-    </nav>
-    -->
+    {% if logged %}
+        <nav class="admin-nav">
+            <a href = "{{ url_for('newItem') }}">Create New Item</a>
+            <a href="{{ url_for('editCategory', category_id = category.id) }}">Edit Category</a>
+            <a href="{{ url_for('deleteCategory', category_id = category.id) }}">Delete Category</a>
+        </nav>
+    {% endif %}
 {% endblock %}
 
 {% block content %}
-    <h1>{{ category.name }}</h1>
-    <div class="items">
-        <h2>Items</h2>
-        
-        {% for i in items %}
-        <a href="{{ url_for('item', item_id=i.id) }}">{{ i.name }}</a>
-        {% endfor %}
+    {% include 'sidebar.html' %}
+    <div class="page_content">
+        <h1>{{ category.name }}</h1>
+        <div class="items">
+            <h2>Items</h2>
+            
+            {% for i in items %}
+            <a href="{{ url_for('item', item_id = i.id) }}">
+                <div class="item_container">
+                    <img src="{{ i.image }}" width="150px">
+                    <div class="text">{{ i.name }}</div>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
     </div>
 {% endblock %}

@@ -16,8 +16,8 @@ a {
 
 .main-menu {
   width: 100%;
-  background-color: white;
-  border-bottom: 2px solid #353535;
+  background-color: #232F3E;
+  border-bottom: 2px solid #3EC142;
   display: -ms-grid;
   display: grid;
       grid-template-areas: "title button";
@@ -29,7 +29,7 @@ a {
 .main-menu #title {
   display: inline-block;
   font-size: 2em;
-  color: #353535;
+  color: white;
   font-weight: bold;
   -ms-grid-row: 1;
   -ms-grid-column: 1;
@@ -41,6 +41,7 @@ a {
 }
 
 .main-menu .user {
+  color: white;
   display: inline-block;
   -ms-grid-row: 1;
   -ms-grid-column: 2;
@@ -54,15 +55,23 @@ a {
 }
 
 .main-menu #login {
-  background-color: #2E467C;
+  background-color: transparent;
   color: white;
-  border: 0;
-  padding: 15px;
+  border: solid 1px;
+  border-color: white;
+  padding: 5px 10px;
   border-radius: 4px;
+  -webkit-transition: background-color 0.2s;
+  /* Safari */
+  transition: background-color 0.2s;
+}
+
+.main-menu #login:hover {
+  background-color: #3EC142;
 }
 
 .main-menu #logout {
-  color: #353535;
+  color: white;
   text-decoration: underline;
   font-size: 85%;
 }
@@ -72,6 +81,7 @@ a {
   background-color: #353535;
   padding: 0 200px 0 200px;
   border-bottom: 2px solid #353535;
+  position: fixed;
 }
 
 .admin-nav a {
@@ -103,33 +113,64 @@ a {
   width: 100%;
 }
 
+.categories {
+  grid-area: categories;
+  margin-right: 50px;
+  padding-right: 50px;
+  border-right: 1px solid rgba(53, 53, 53, 0.2);
+}
+
+.categories ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.categories a {
+  display: inline-block;
+  color: #353535;
+  padding: 5px 5px;
+  width: 100%;
+}
+
+.categories a:hover {
+  background-color: rgba(53, 53, 53, 0.1);
+}
+
 .container {
-  margin: 25px 200px 0 200px;
+  margin: 50px 200px;
 }
 
-.items {
-  grid-area: items;
+.page_content {
+  grid-area: content;
 }
 
-.items a {
+.page_content a {
   display: inline-block;
   margin: 2px 0;
 }
 
-.items a div {
+.page_content a .item_container {
   color: #353535;
   text-align: center;
   padding: 20px;
   border: 1px solid rgba(53, 53, 53, 0.1);
+  height: 200px;
 }
 
-.items a div img {
+.page_content a .item_container img {
   display: block;
-  width: 150px;
-  max-height: 150px;
+  height: 90%;
+  -o-object-fit: contain;
+     object-fit: contain;
+  margin: auto;
 }
 
-.items a:hover div {
+.page_content a .item_container .text {
+  margin-top: 8px;
+}
+
+.page_content a:hover .item_container {
   border: 1px solid rgba(53, 53, 53, 0.2);
 }
 /*# sourceMappingURL=styles.css.map */

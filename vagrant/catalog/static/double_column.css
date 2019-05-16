@@ -1,0 +1,9 @@
+.container {
+  display: -ms-grid;
+  display: grid;
+      grid-template-areas: "message message" "categories content";
+  -ms-grid-columns: max-content auto;
+      grid-template-columns: -webkit-max-content auto;
+      grid-template-columns: max-content auto;
+}
+/*# sourceMappingURL=double_column.css.map */
