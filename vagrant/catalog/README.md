@@ -18,7 +18,7 @@ All the server code is contained inside the application.py file, separated on di
 
 - [Vagrant](https://www.vagrantup.com/)
 - [VirtualBox](https://www.virtualbox.org/)
-- [Python 3](https://www.python.org/downloads/)
+- [Virtualenv](https://virtualenv.pypa.io/en/latest/)
 
 ## How to run it
 
@@ -28,6 +28,7 @@ $ cd vagrant
 $ vagrant up
 $ vagrant ssh
 vagrant@vagrant$ cd /vagrant/catalog
-vagrant@vagrant$ python database_setup.py
-vagrant@vagrant$ python application.py
+vagrant@vagrant$ source /env/bin/activate
+(env) vagrant@vagrant$ python database_setup.py
+(env) vagrant@vagrant$ python application.py
 ```
