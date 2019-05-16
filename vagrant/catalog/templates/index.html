@@ -26,9 +26,9 @@
         {% for i in items %}
 
         <a href="{{ url_for('item', item_id = i.id) }}">
-            <div>
+            <div class="item_container">
                 <img src="{{ i.image }}" width="150px">
-                {{ i.name }}
+                <div class="text">{{ i.name }}</div>
             </div>
         </a>
 

@@ -13,9 +13,15 @@
 <form action="{{ url_for('editItem', item_id = item.id ) }}" method = 'post'>
     <h1>Edit item {{ item.name }}</h1>
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+    <label>Name</label>
     <input type='text' size='30' name='name' value='{{ item.name }}' required>
+    <label>Description</label>
     <textarea rows='4' name='description' required>{{ item.description }}</textarea>
+    <label>Price</label>
     <input type='text' size='30' name='price' value='{{ item.price }}' required>
+    <label>Image URI</label>
+    <input type='text' size='30' name='image' value='{{ item.image }}' required>
+    <label>Category</label>
     <select name='category' required>
         {% for c in categories %}
         {% if item.category_id == c.id %}

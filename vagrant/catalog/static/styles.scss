@@ -113,7 +113,9 @@ a {
 
 .categories { 
     grid-area: categories;
-    margin-right: $margin/2;
+    margin-right: $margin/4;
+    padding-right: $margin/4;
+    border-right: 1px solid rgba($black, 0.2);
 
     ul {
         list-style: none;   
@@ -142,25 +144,30 @@ a {
     a {
         display: inline-block;
         margin: 2px 0;
-        div {
+        .item_container {
             color: $black;
             text-align: center;
             padding: 20px;
             border: 1px solid rgba($black, 0.1);
-            height: 150px;
+            height: 200px;
 
             img {
                 display: block; 
                 
-                height: 100%; 
+                height: 90%; 
                 object-fit: contain; 
+                margin: auto;
+            }
+
+            .text {
+                margin-top: 8px;
             }
         }
     }
 
     a:hover {
-        div {
+        .item_container {
             border: 1px solid rgba($black, 0.2);
         }
-    }
+    } 
 }

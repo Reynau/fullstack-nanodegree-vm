@@ -13,8 +13,8 @@
 {% block admin_navbar %}
     {% if item.sub == session['sub'] %}
     <nav class="admin-nav">
-        <a href="{{ url_for('editItem', item_id=item.id) }}">Edit</a>
-        <a class="delete" href="{{ url_for('deleteItem', item_id=item.id) }}">Delete</a>
+        <a href="{{ url_for('editItem', item_id=item.id) }}">Edit item</a>
+        <a class="delete" href="{{ url_for('deleteItem', item_id=item.id) }}">Delete item</a>
     </nav>
     {% endif %}
 {% endblock %}

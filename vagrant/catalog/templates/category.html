@@ -11,12 +11,12 @@
 
 {% block admin_navbar %}
     {% if logged %}
+        <nav class="admin-nav">
+            <a href = "{{ url_for('newItem') }}">Create New Item</a>
+            <a href="{{ url_for('editCategory', category_id = category.id) }}">Edit Category</a>
+            <a href="{{ url_for('deleteCategory', category_id = category.id) }}">Delete Category</a>
+        </nav>
     {% endif %}
-    <nav class="admin-nav">
-        <a href = "{{ url_for('newItem') }}">Create New Item</a>
-        <a href="{{ url_for('editCategory', category_id = category.id) }}">Edit Category</a>
-        <a href="{{ url_for('deleteCategory', category_id = category.id) }}">Delete Category</a>
-    </nav>
 {% endblock %}
 
 {% block content %}
@@ -28,9 +28,9 @@
             
             {% for i in items %}
             <a href="{{ url_for('item', item_id = i.id) }}">
-                <div>
+                <div class="item_container">
                     <img src="{{ i.image }}" width="150px">
-                    {{ i.name }}
+                    <div class="text">{{ i.name }}</div>
                 </div>
             </a>
             {% endfor %}

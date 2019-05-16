@@ -115,7 +115,9 @@ a {
 
 .categories {
   grid-area: categories;
-  margin-right: 100px;
+  margin-right: 50px;
+  padding-right: 50px;
+  border-right: 1px solid rgba(53, 53, 53, 0.2);
 }
 
 .categories ul {
@@ -148,22 +150,27 @@ a {
   margin: 2px 0;
 }
 
-.page_content a div {
+.page_content a .item_container {
   color: #353535;
   text-align: center;
   padding: 20px;
   border: 1px solid rgba(53, 53, 53, 0.1);
-  height: 150px;
+  height: 200px;
 }
 
-.page_content a div img {
+.page_content a .item_container img {
   display: block;
-  height: 100%;
+  height: 90%;
   -o-object-fit: contain;
      object-fit: contain;
+  margin: auto;
 }
 
-.page_content a:hover div {
+.page_content a .item_container .text {
+  margin-top: 8px;
+}
+
+.page_content a:hover .item_container {
   border: 1px solid rgba(53, 53, 53, 0.2);
 }
 /*# sourceMappingURL=styles.css.map */

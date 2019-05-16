@@ -26,6 +26,17 @@ DBSession = sessionmaker(bind=engine)
 cred = credentials.Certificate("credentials/cred.json")
 firebase_admin.initialize_app(cred)
 
+@app.before_request
+def do_something_whenever_a_request_comes_in():
+    if not 'sub' in session:
+        session_cookie = request.cookies.get('token')
+        try:
+            decoded_claims = auth.verify_session_cookie(session_cookie, check_revoked=True)
+            session['sub'] = decoded_claims['uid']
+            session['name'] = decoded_claims['name']
+            return
+        except:
+            return
 
 
 def login_required(f):
@@ -35,7 +46,9 @@ def login_required(f):
         # Verify the session cookie. In this case an additional check is added to detect
         # if the user's Firebase session was revoked, user deleted/disabled, etc.
         try:
-            auth.verify_session_cookie(session_cookie, check_revoked=True)
+            decoded_claims = auth.verify_session_cookie(session_cookie, check_revoked=True)
+            session['sub'] = decoded_claims['uid']
+            session['name'] = decoded_claims['name']
             return f(*args, **kwargs)
         except ValueError as e:
             # Session cookie is unavailable or invalid. Force user to login.
@@ -143,7 +156,7 @@ def item(item_id):
     # Verify the session cookie. In this case an additional check is added to detect
     # if the user's Firebase session was revoked, user deleted/disabled, etc.
     try:
-        auth.verify_session_cookie(session_cookie, check_revoked=True)
+        decoded_claims = auth.verify_session_cookie(session_cookie, check_revoked=True)
         return render_template('item.html', item=item, logged=True)
     except ValueError as e:
         # Session cookie is unavailable or invalid. Force user to login.
