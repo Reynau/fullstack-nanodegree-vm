@@ -28,6 +28,10 @@ DBSession = sessionmaker(bind=engine)
 cred = credentials.Certificate("credentials/cred.json")
 firebase_admin.initialize_app(cred)
 
+
+######################################
+# SESSION LOADER
+
 @app.before_request
 def do_something_whenever_a_request_comes_in():
     if not 'sub' in session:
@@ -39,7 +43,11 @@ def do_something_whenever_a_request_comes_in():
             return
         except:
             return
+            
+######################################
 
+######################################
+# LOGIN DECORATOR
 
 def login_required(f):
     @wraps(f)
@@ -61,6 +69,11 @@ def login_required(f):
             print(e)
             return redirect(url_for('login', mode="select", signInSuccessUrl=request.url))
     return decorated_function
+
+######################################
+
+######################################
+# ROUTING
 
 @app.route('/categories')
 @app.route('/')
@@ -244,8 +257,11 @@ def deleteItem(item_id):
         flash("Item deleted correctly!")
         return redirect(url_for('category', category_id=category.id))
 
+######################################
 
 
+######################################
+# REST API
 
 @app.route('/api/categories/')
 def categoriesJSON():
@@ -260,8 +276,11 @@ def itemsJSON():
     items = db_session.query(Item).all()
     return jsonify(Items=[i.serialize for i in items])
 
+######################################
 
 
+######################################
+# AUTHENTICATION
 
 @app.route('/login')
 def login():
@@ -296,6 +315,8 @@ def logout():
     response = make_response(redirect(request.referrer))
     response.set_cookie('token', expires=0)
     return response
+
+######################################
 
 @app.context_processor
 def base_template_vars():
