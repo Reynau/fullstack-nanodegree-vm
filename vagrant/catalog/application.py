@@ -47,27 +47,6 @@ def login_required(f):
             return redirect(url_for('login', mode="select", signInSuccessUrl=request.url))
     return decorated_function
 
-def admin_required(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        session_cookie = request.cookies.get('token')
-        # Verify the session cookie. In this case an additional check is added to detect
-        # if the user's Firebase session was revoked, user deleted/disabled, etc.
-        try:
-            decoded_claims = auth.verify_session_cookie(session_cookie, check_revoked=True)
-            if decoded_claims.get('admin') is False:
-                return abort(401, 'Insufficient permissions')
-            return f(*args, **kwargs)
-        except ValueError as e:
-            # Session cookie is unavailable or invalid. Force user to login.
-            print(e)
-            return redirect(url_for('login', mode="select", signInSuccessUrl=request.url))
-        except auth.AuthError as e:
-            # Session revoked. Force user to login.
-            print(e)
-            return redirect(url_for('login', mode="select", signInSuccessUrl=request.url))
-    return decorated_function
-
 @app.route('/categories')
 @app.route('/')
 def categories():
@@ -113,7 +92,7 @@ def category(category_id):
         return render_template('category.html', category=category, items=items, logged=False)
 
 @app.route('/categories/new/', methods=['GET', 'POST'])
-@admin_required
+@login_required
 def newCategory():
     if request.method == 'GET':
         return render_template('new_category.html', logged=True)
@@ -127,7 +106,7 @@ def newCategory():
 
 
 @app.route('/categories/<int:category_id>/edit/', methods=['GET', 'POST'])
-@admin_required
+@login_required
 def editCategory(category_id):
     db_session = DBSession()
     category = db_session.query(Category).get(category_id)
@@ -142,7 +121,7 @@ def editCategory(category_id):
 
 
 @app.route('/categories/<int:category_id>/delete/', methods=['GET', 'POST'])
-@admin_required
+@login_required
 def deleteCategory(category_id):       
     db_session = DBSession()
     category = db_session.query(Category).get(category_id)
