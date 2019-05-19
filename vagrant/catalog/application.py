@@ -319,6 +319,13 @@ def itemsJSON():
     items = db_session.query(Item).all()
     return jsonify(Items=[i.serialize for i in items])
 
+
+@app.route('/api/items/<int:item_id>/')
+def itemJSON(item_id):
+    db_session = DBSession()
+    item = db_session.query(Item).get(item_id)
+    return jsonify(Item=item.serialize)
+
 ######################################
 
 
